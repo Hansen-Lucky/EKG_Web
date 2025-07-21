@@ -20,11 +20,9 @@
                                     <th>Name</th>
                                     <th>Age</th>
                                     <th>Gender</th>
-                                    <th>Pacemaker</th>
                                     <th>Source</th>
                                     <th>Result EKG</th>
                                     <th>Examination Date</th>
-                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -39,11 +37,6 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="badge bg-{{ $ekg->patient->pacemaker == 'Yes' ? 'warning' : 'success' }}">
-                                            {{ $ekg->patient->pacemaker }}
-                                        </span>
-                                    </td>
-                                    <td>
                                         <span class="badge bg-info">{{ $ekg->patient->source }}</span>
                                     </td>
                                     <td>
@@ -55,15 +48,6 @@
                                         </a>
                                     </td>
                                     <td>{{ $ekg->examination_date->format('d/m/Y H:i') }}</td>
-                                    <td>
-                                        <form method="POST" action="{{ route('ekg.destroy', $ekg) }}" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Are you sure?')">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
                                 </tr>
                                 @empty
                                 <tr>
