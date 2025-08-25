@@ -7,9 +7,9 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h3><i class="fas fa-users me-2"></i>Daftar Pasien</h3>
-                    <button class="btn btn-primary">
+                    <a href="{{ route('patients.create') }}" class="btn btn-primary">
                         <i class="fas fa-plus me-2"></i>Tambah Pasien
-                    </button>
+                    </a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

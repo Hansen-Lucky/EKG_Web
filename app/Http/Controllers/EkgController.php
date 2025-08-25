@@ -45,14 +45,18 @@ class EkgController extends Controller
     public function download($id)
     {
         $ekgResult = EkgResult::findOrFail($id);
-        $filePath = storage_path('app/public/' . $ekgResult->result_file_path);
-        
+
+        $relativePath = preg_replace('/^public\//', '', $ekgResult->result_file_path);
+
+        $filePath = storage_path('app/public/' . $relativePath);
+
         if (file_exists($filePath)) {
             return response()->download($filePath);
         }
-        
-        return abort(404, 'File not found');
+
+        abort(404, 'File not found');
     }
+
 
     public function destroy(EkgResult $ekgResult)
     {

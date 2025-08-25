@@ -16,7 +16,6 @@
                         <table class="table table-striped table-hover">
                             <thead class="table-dark">
                                 <tr>
-                                    <th>ID</th>
                                     <th>Name</th>
                                     <th>Age</th>
                                     <th>Gender</th>
@@ -28,7 +27,6 @@
                             <tbody>
                                 @forelse($ekgResults as $ekg)
                                 <tr>
-                                    <td>{{ $ekg->id }}</td>
                                     <td>{{ $ekg->patient->name }}</td>
                                     <td>{{ $ekg->patient->age }}</td>
                                     <td>
