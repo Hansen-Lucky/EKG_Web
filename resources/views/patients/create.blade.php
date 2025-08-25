@@ -25,7 +25,7 @@
                         </div>
                         <div class="mb-4">
                             <div class="d-flex justify-content-end">
-                                <button type="submit" class="btn btn-success me-2">
+                                <button type="button" onclick="sendPrintLabel()" class="btn btn-success me-2">
                                     <i class="fas fa-print me-1"></i> Print
                                 </button>
                                 <a href="{{ route('patients.index') }}" class="btn btn-secondary">
@@ -39,4 +39,32 @@
         </div>
     </div>
 </div>
+@endsection
+@section('scripts')
+<script>
+async function sendPrintLabel() {
+    var cmd = gpTSC.createNew();
+
+    // Set size for wristband
+    cmd.setSize(25, 275);
+    cmd.setGap(0);
+    cmd.setCls();
+
+    // Get values from form
+    let medicalRecordId = document.getElementById('medical_record_id').value;
+    let name = document.getElementById('name').value;
+    let dob = document.getElementById('date_of_birth').value;
+
+    // Example QR + Text
+    cmd.setQR(152, 406, "L", 7, "A", 90, medicalRecordId);
+    cmd.setText(162, 609, "TSS24.BF2", 90, 2, 2, medicalRecordId);
+    cmd.setText(102, 609, "TSS24.BF2", 90, 2, 2, name);
+    cmd.setText(42, 609, "TSS24.BF2", 90, 2, 2, dob);
+
+    cmd.setPagePrint();
+
+    // Send to printer
+    await gpTool.writePrintData(gpTool.getDataView(cmd.getData()));
+}
+</script>
 @endsection
