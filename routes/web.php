@@ -1,10 +1,12 @@
 <?php
 
+use App\Events\HeartRateUpdated;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\EkgController;
 use App\Http\Controllers\JumbotronController;
+use App\Http\Controllers\OximonitorController;
 use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -13,6 +15,7 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::resource('patients', PatientController::class);
 Route::resource('ekg', EkgController::class);
+Route::resource('oximonitor', OximonitorController::class)->only(['index']);
 Route::get('/ekg/download/{id}', [EkgController::class, 'download'])->name('ekg.download');
 
 Route::get('/jumbotron/', [JumbotronController::class, 'index'])->name('jumbotron.index');
@@ -44,4 +47,9 @@ Route::post('/send-to-worklist/{id}', function (Request $request, $id) {
     }
     
     return response()->json(['success' => true]);
+});
+
+Route::get('/test-heart', function () {
+    broadcast(new HeartRateUpdated(rand(60, 100)));
+    return "broadcast sent";
 });

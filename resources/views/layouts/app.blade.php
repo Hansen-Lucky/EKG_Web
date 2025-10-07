@@ -6,6 +6,7 @@
     <title>EKG Management System</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .sidebar {
             min-height: 100vh;
@@ -53,6 +54,7 @@
             border-radius: 10px;
         }
     </style>
+    @vite(['resources/js/app.js', 'resources/css/app.css'])
 </head>
 <body>
     <div class="container-fluid">
@@ -95,6 +97,13 @@
                                 Jumbotron
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('oximonitor.*') ? 'active' : '' }}" 
+                            href="{{ route('oximonitor.index') }}">
+                                <i class="fas fa-desktop me-2"></i>
+                                Oximonitor
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </nav>
@@ -121,5 +130,6 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    @stack('scripts')
 </body>
 </html>

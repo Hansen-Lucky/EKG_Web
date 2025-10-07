@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\HeartRateUpdated;
 use App\Models\EkgResult;
 use App\Models\Patient;
 use Illuminate\Http\Request;
@@ -9,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,6 +26,7 @@ use Illuminate\Support\Carbon;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 
 Route::post('/ecg-result', function (Request $request) {
     if (!$request->hasFile('pdf')) {
@@ -42,7 +46,6 @@ Route::post('/ecg-result', function (Request $request) {
     $filename = now()->format('Ymd_His') . '_' . Str::slug($examName ?? 'ecg') . '_' . Str::random(6) . '.pdf';
     $path = $pdf->storeAs('public/ecg-results', $filename);
 
-    // ✅ Save to DB
     EkgResult::create([
         'patient_id' => $patientId,
         'result_file_path' => $path,
@@ -50,4 +53,18 @@ Route::post('/ecg-result', function (Request $request) {
     ]);
 
     return response()->json(['status' => 'ok', 'message' => 'Result stored', 'filename' => $filename]);
+});
+
+Route::post('/iotdataupload', function (Request $request) {
+    $devName = $request->query('dev_name');
+    $devMac  = $request->query('dev_macaddr');
+    $data    = $request->all();
+
+    Log::info('Received IoT data (route):', $data);
+
+    broadcast(new HeartRateUpdated($data));
+
+    Log::info('Broadcast called for HeartRateUpdated (route).');
+
+    return response("OK", 200);
 });
